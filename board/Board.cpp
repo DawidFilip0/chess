@@ -1,0 +1,65 @@
+#include "Board.h"
+
+
+Board::Board():allPieces{}{
+    allPieces.setupStartingPosition();
+};
+
+Bitboards Board::getAllPieces(){
+    return allPieces;
+}   
+
+void Board::switchSide(){
+    if(WHITE){sideToMove = BLACK;}
+    else{sideToMove = WHITE;}
+}
+
+Bitboard Board::gen_p_mv(Bitboard pawn, int side){
+    Bitboard legal_moves = 0;
+    Bitboard tentative_moves = 0;
+    Bitboard tentative_attacks = 0;
+    int sq = __builtin_ctzll(pawn);
+
+
+    if(side == WHITE){
+        tentative_moves = pawn;
+        
+        tentative_moves = (tentative_moves >> 8);
+        if((sq / 8) == 6){ tentative_moves = tentative_moves | (tentative_moves >> 8) ;}
+        
+       
+
+        tentative_attacks = pawn;
+        if(sq % 8 != 7){ tentative_attacks = (pawn >> 7);}
+        if(sq % 8 != 0){tentative_attacks = tentative_attacks | (pawn >> 9);}
+        
+        legal_moves = tentative_attacks &  allPieces.blackOccupancy;
+        tentative_moves = (tentative_moves &  ~allPieces.allOccupancy);
+        legal_moves = tentative_moves | legal_moves;
+    }
+    else{
+        tentative_moves = pawn;
+        
+        tentative_moves = (tentative_moves << 8);
+        if((sq / 8) == 6){ tentative_moves = tentative_moves | (tentative_moves << 8) ;}
+        
+       
+
+        tentative_attacks = pawn;
+        if(sq % 8 != 0){ tentative_attacks = (pawn << 7);}
+        if(sq % 8 != 7){tentative_attacks = tentative_attacks | (pawn << 9);}
+        
+        legal_moves = tentative_attacks &  allPieces.blackOccupancy;
+        tentative_moves = (tentative_moves &  ~allPieces.allOccupancy);
+        legal_moves = tentative_moves | legal_moves;
+    }
+    
+    
+
+
+
+
+    
+    return legal_moves;
+}
+
