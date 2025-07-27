@@ -2,6 +2,7 @@
 #include "./graphics/window.h"
 #include "./board/BitBoards.h"
 #include "./board/Board.h"
+#include "./userInput/inputHandler.h"
 
 
 #define WIDTH 600
@@ -19,10 +20,11 @@ int main()
 
     sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGTH), "SZACHY 2000");
     Board board = Board();
-
-
     window.setActive(true);
-    WindowManager* winManager = new WindowManager(WIDTH,HEIGTH,window,board);
+    
+    
+    WindowManager winManager = WindowManager(WIDTH,HEIGTH,window,board);
+    InputHandler inputHandler = InputHandler(winManager, window,board);
 
     while (window.isOpen())
     {
@@ -34,7 +36,7 @@ int main()
             if (event.type == sf::Event::Closed)
                 window.close();
         }
-        winManager->draw();
+        winManager.draw();
         
         
     }

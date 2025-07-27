@@ -1,9 +1,10 @@
 #include "window.h"
 #include <iostream>
 #include <SFML/Graphics.hpp>
-
 #include <filesystem>
 #include <iostream>
+
+
 WindowManager::WindowManager(int width, int height, sf::RenderWindow& win, Board& board):window(win),board(board)
 {
 
@@ -39,14 +40,10 @@ WindowManager::WindowManager(int width, int height, sf::RenderWindow& win, Board
 }
 
 void WindowManager::draw(){
-
-
         window.clear();
         drawBoard();
         drawPieces(WHITE);
         window.display();
-
-
 }
 
 
@@ -93,7 +90,7 @@ void WindowManager::drawPieces(int side){
                     int x = 0;
                     int y = 0;
                     if(side == BLACK){
-                        y =  7 - (sq / 8);   
+                        y =  7 - (sq / 8);
                         x =  7 - (sq % 8); 
                     }
                     else{
@@ -144,3 +141,17 @@ void WindowManager::drawPieces(int side){
 
 
 
+
+void WindowManager::colorSquare(int y, int x, sf::Color col){
+
+    int square_width = (int)width/8;
+    sf::RectangleShape shape3({square_width,square_width});
+        shape3.setFillColor(sf::Color::Transparent);
+    shape3.setOutlineColor(col);
+    shape3.setOutlineThickness(3);
+
+    shape3.setPosition(x*square_width,y*square_width);
+    window.draw(shape3);
+
+
+}

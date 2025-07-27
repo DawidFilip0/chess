@@ -3,7 +3,7 @@ CXXFLAGS = -Wall -g
 LDFLAGS = -lsfml-graphics -lsfml-window -lsfml-system
 
 TARGET = sfml-app
-OBJ = main.o graphics/window.o board/Board.o 
+OBJ = main.o graphics/window.o board/Board.o  userInput/inputHandler.o
 
 $(TARGET): $(OBJ)
 	$(CXX) $(OBJ) -o $(TARGET) $(LDFLAGS)

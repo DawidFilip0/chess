@@ -10,9 +10,11 @@
 class WindowManager{
 public:
     WindowManager(int width, int height,sf::RenderWindow& window, Board& board);
-    ~WindowManager();
+    // ~WindowManager();
     void createWindow();
     void draw();
+    void colorSquare(int y, int x, sf::Color col);
+
 
 ;
 private:
@@ -23,7 +25,9 @@ private:
     
     sf::RenderWindow& window;
     Board& board;
+    sf::Mouse mouse;
     void drawBoard();
+    void handleMouse(); //change the name later
     void drawPieces(int side);
 
 }

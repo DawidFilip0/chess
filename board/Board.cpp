@@ -41,7 +41,7 @@ Bitboard Board::gen_p_mv(Bitboard pawn, int side){
         tentative_moves = pawn;
         
         tentative_moves = (tentative_moves << 8);
-        if((sq / 8) == 6){ tentative_moves = tentative_moves | (tentative_moves << 8) ;}
+        if((sq / 8) == 1){ tentative_moves = tentative_moves | (tentative_moves << 8) ;}
         
        
 

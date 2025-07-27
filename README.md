@@ -1,0 +1,1 @@
+A hobby chess game project along with a chess engine
