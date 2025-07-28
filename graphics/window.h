@@ -14,6 +14,7 @@ public:
     void createWindow();
     void draw();
     void colorSquare(int y, int x, sf::Color col);
+    void addDrawable(sf::Shape shape)
 
 
 ;
@@ -21,6 +22,7 @@ private:
     int width;
     int heigth;
     sf::Texture textures[COLOR_NB][PIECE_TYPE_NB];
+
 
     
     sf::RenderWindow& window;

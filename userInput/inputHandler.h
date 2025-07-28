@@ -8,13 +8,13 @@
 class InputHandler{
 public:
 
-    InputHandler(WindowManager winManager,sf::RenderWindow& window, Board& board);
+    InputHandler(sf::RenderWindow& window, Board& board);
     void handleMouse(int width);
 
 private:
     sf::RenderWindow& window;
     Board& board;
-    WindowManager& winManager;
+    
 
 
 

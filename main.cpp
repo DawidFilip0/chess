@@ -22,9 +22,9 @@ int main()
     Board board = Board();
     window.setActive(true);
     
-    
+    InputHandler inputHandler = InputHandler(window,board);
     WindowManager winManager = WindowManager(WIDTH,HEIGTH,window,board);
-    InputHandler inputHandler = InputHandler(winManager, window,board);
+
 
     while (window.isOpen())
     {
@@ -37,6 +37,7 @@ int main()
                 window.close();
         }
         winManager.draw();
+       
         
         
     }

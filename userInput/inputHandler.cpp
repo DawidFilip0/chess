@@ -3,10 +3,8 @@
 #include "inputHandler.h"
 
 
-InputHandler::InputHandler(WindowManager winManager,sf::RenderWindow& window, Board& board)
-:winManager(winManager),window(window),board(board){
-    
-}
+InputHandler::InputHandler(sf::RenderWindow& window, Board& board)
+:window(window),board(board){}
 
 
 void InputHandler::handleMouse(int width){
@@ -18,6 +16,6 @@ void InputHandler::handleMouse(int width){
     int ysq = (int)(pos.y/sq_width);
     
 
-    winManager.colorSquare(ysq,xsq,sf::Color::Blue);
+
 
 }

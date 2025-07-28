@@ -146,12 +146,13 @@ void WindowManager::colorSquare(int y, int x, sf::Color col){
 
     int square_width = (int)width/8;
     sf::RectangleShape shape3({square_width,square_width});
-        shape3.setFillColor(sf::Color::Transparent);
+    shape3.setFillColor(sf::Color::Transparent);
     shape3.setOutlineColor(col);
     shape3.setOutlineThickness(3);
 
     shape3.setPosition(x*square_width,y*square_width);
     window.draw(shape3);
+    window.display();
 
 
 }
