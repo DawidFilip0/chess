@@ -63,3 +63,11 @@ Bitboard Board::gen_p_mv(Bitboard pawn, int side){
     return legal_moves;
 }
 
+
+
+Bitboard Board::get_moves_from_square(Bitboard square){
+    Bitboard possible_moves = 0;
+    if(square != 0 && (square & (square - 1)) != 0){return possible_moves;} // makes sure only one bit is set to 1
+    return gen_p_mv(square,WHITE);
+
+}

@@ -21,24 +21,22 @@ int main()
     sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGTH), "SZACHY 2000");
     Board board = Board();
     window.setActive(true);
+    window.setFramerateLimit(60);
+
     
     InputHandler inputHandler = InputHandler(window,board);
-    WindowManager winManager = WindowManager(WIDTH,HEIGTH,window,board);
+    WindowManager winManager = WindowManager(WIDTH,HEIGTH,window,board,inputHandler);
 
 
     while (window.isOpen())
     {
-
-
         sf::Event event;
         while (window.pollEvent(event))
         {
-            if (event.type == sf::Event::Closed)
-                window.close();
+            if(event.type == sf::Event::Closed){window.close();}
+            if(event.type == sf::Event::MouseButtonPressed){inputHandler.selectSquare(event);}
         }
         winManager.draw();
-       
-        
         
     }
 

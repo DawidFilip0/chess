@@ -15,6 +15,7 @@ class Board{
         Bitboards getAllPieces();
         
         //move generation
+        Bitboard get_moves_from_square(Bitboard square);
         Bitboard gen_p_mv(Bitboard piece, int side);
         Bitboard gen_b_mv(Bitboard piece, int side);
         Bitboard gen_k_mv(Bitboard piece, int side); //king
