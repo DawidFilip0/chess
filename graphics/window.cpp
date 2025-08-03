@@ -86,26 +86,7 @@ void WindowManager::drawPieces(int perspective){
             }
         }
 
-        Bitboard wP = board.getAllPieces().boards[WHITE][PAWN];
-        Bitboard last_bit = wP & -wP;
-        Bitboard av_m = board.gen_p_mv(last_bit,WHITE);
-        shape3.setFillColor(sf::Color::Blue);
-        while(av_m){
-                int sq = __builtin_ctzll(av_m); 
-                av_m &= av_m-1; // a trick to pop least significant bit     0b1100 - 1 = 0b1011, 0b1100 & 0b1011 = 0b1000
-                int x = 0;
-                int y = 0;
-                if(perspective == BLACK){
-                    y =  7 - (sq / 8);   
-                    x =  7 - (sq % 8); 
-                }
-                else{
-                    y = sq / 8;   
-                    x =  sq % 8;  
-                }
-                shape3.setPosition(x*square_width,y*square_width);
-                window.draw(shape3);
-        }
+
     
 }
 

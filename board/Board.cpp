@@ -68,6 +68,27 @@ Bitboard Board::gen_p_mv(Bitboard pawn, int side){
 Bitboard Board::get_moves_from_square(Bitboard square){
     Bitboard possible_moves = 0;
     if(square != 0 && (square & (square - 1)) != 0){return possible_moves;} // makes sure only one bit is set to 1
-    return gen_p_mv(square,WHITE);
+    //decide type of piece and its side
+     for(int color = WHITE; color < COLOR_NB; color++){
+        for(int piece = PAWN; piece < PIECE_TYPE_NB; piece++ ){
+            if((allPieces.boards[color][piece] & square) > 0){
+                return apply_gen_funciton(color, square, piece);
+            }
+        }
+    }
+    return possible_moves;
+    // return gen_p_mv(square,WHITE);
+}
 
+Bitboard Board::apply_gen_funciton(int side, Bitboard square, int piece_type){
+    Bitboard defult_return = 0;
+    switch (piece_type)
+    {
+    case PAWN:
+        return gen_p_mv(square,side);
+        break;
+    default:
+        return defult_return;
+    }
+    return defult_return;
 }
