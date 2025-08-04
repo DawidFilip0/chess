@@ -107,13 +107,15 @@ void WindowManager::drawHighlight(){
     int y = 0;
     int x = 0;
     inputHandler.getHoveredSquare(width,y,x);
-    colorSquare(y,x,sf::Color::Blue);
+    sf::Color c(100, 100, 255);
+    colorSquare(y,x,c);
 
 }
 
 void WindowManager::drawSelect(){
     if(inputHandler.isSquareSelected){
-        colorSquare(inputHandler.selectedSquare[0],inputHandler.selectedSquare[1],sf::Color::Red);
+        sf::Color c(255, 215, 0);
+        colorSquare(inputHandler.selectedSquare[0],inputHandler.selectedSquare[1],c);
     }
 }
 
@@ -132,6 +134,7 @@ void WindowManager::drawPossibleMoves(int perspective){
                     y = sq / 8;   
                     x =  sq % 8;  
                 }
-                colorSquare(y,x,sf::Color::Green);
+                sf::Color c(0, 255, 0);
+                colorSquare(y,x,c);
     }
 }

@@ -11,8 +11,10 @@ class Board{
     
         Board();
         void switchSide();
-        void movePiece();
+        void movePieceValidate(Bitboard from, Bitboard to);
+        void movePieceNoValidate(Bitboard from, Bitboard to);
         Bitboards getAllPieces();
+
         
         //move generation
         Bitboard get_moves_from_square(Bitboard square);
@@ -24,12 +26,13 @@ class Board{
         Bitboard gen_q_mv(Bitboard piece, int side);
         Bitboard gen_r_mv(Bitboard piece, int side);
     private:
-
         bool sideToMove;
         bool isBlackChecked;
         bool isWhiteChecked;
         short int move_number;
         Bitboards allPieces;
+
+        void movePiece(Bitboard from, Bitboard to);
 
 };
 

@@ -14,6 +14,16 @@ void Board::switchSide(){
     else{sideToMove = WHITE;}
 }
 
+void Board::movePieceNoValidate(Bitboard from, Bitboard to){ //does not take validation into account
+    movePiece(from,to);
+}
+
+void Board::movePiece(Bitboard from, Bitboard to){
+    PieceInfo info = allPieces.findPieceType(from);
+    allPieces.boards[info.color][info.type]  = allPieces.boards[info.color][info.type] & ~from;
+    allPieces.boards[info.color][info.type]  = allPieces.boards[info.color][info.type] | to;
+}
+
 Bitboard Board::gen_p_mv(Bitboard pawn, int side){
     Bitboard legal_moves = 0;
     Bitboard tentative_moves = 0;
@@ -68,16 +78,9 @@ Bitboard Board::gen_p_mv(Bitboard pawn, int side){
 Bitboard Board::get_moves_from_square(Bitboard square){
     Bitboard possible_moves = 0;
     if(square != 0 && (square & (square - 1)) != 0){return possible_moves;} // makes sure only one bit is set to 1
-    //decide type of piece and its side
-     for(int color = WHITE; color < COLOR_NB; color++){
-        for(int piece = PAWN; piece < PIECE_TYPE_NB; piece++ ){
-            if((allPieces.boards[color][piece] & square) > 0){
-                return apply_gen_funciton(color, square, piece);
-            }
-        }
-    }
-    return possible_moves;
-    // return gen_p_mv(square,WHITE);
+    PieceInfo info = allPieces.findPieceType(square);
+    if(info.color == -1){return possible_moves;};
+    return apply_gen_funciton(info.color,square,info.type);
 }
 
 Bitboard Board::apply_gen_funciton(int side, Bitboard square, int piece_type){

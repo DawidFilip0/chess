@@ -21,6 +21,9 @@ void InputHandler::selectSquare(sf::Event event){
         getHoveredSquare(600,selectedSquare[0],selectedSquare[1]);
         Bitboard maks = getMask(selectedSquare[0],selectedSquare[1]);
         possibleMoves = board.get_moves_from_square(maks);
+        if(isPieceSelected){
+            //in future: applyUserMove(from, to)
+        }
     }
     else if (event.mouseButton.button == sf::Mouse::Right){
         isSquareSelected = false;

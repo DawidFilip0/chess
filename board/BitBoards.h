@@ -7,6 +7,12 @@
 
 using Bitboard = uint64_t;
 
+struct PieceInfo{
+    int color;
+    int type;
+};
+
+
 struct Bitboards {
     Bitboard boards[COLOR_NB][PIECE_TYPE_NB];
     Bitboard blackOccupancy;
@@ -48,6 +54,18 @@ struct Bitboards {
         whiteOccupancy = boards[WHITE][PAWN] |  boards[WHITE][KNIGHT] | boards[WHITE][ROOK] |boards[WHITE][BISHOP] | boards[WHITE][QUEEN] |  boards[WHITE][KING];
         blackOccupancy = boards[BLACK][PAWN] |  boards[BLACK][KNIGHT] | boards[BLACK][ROOK] |boards[BLACK][BISHOP] | boards[BLACK][QUEEN] |  boards[BLACK][KING];;
         allOccupancy = whiteOccupancy | blackOccupancy;
+    }
+
+    PieceInfo findPieceType(Bitboard square){
+        for(int color = WHITE; color < COLOR_NB; color++){
+            for(int piece = PAWN; piece < PIECE_TYPE_NB; piece++ ){
+                if((boards[color][piece] & square) > 0){
+                    return {color,piece};
+                }
+
+            }
+        }
+        return {-1,-1}; //empty square
     }
 
 
