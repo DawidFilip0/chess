@@ -31,7 +31,9 @@ class Board{
         bool isWhiteChecked;
         short int move_number;
         Bitboards allPieces;
+        
 
+        bool singleBitIsOn(Bitboard sq);
         void movePiece(Bitboard from, Bitboard to);
 
 };

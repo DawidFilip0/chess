@@ -28,6 +28,8 @@ int main()
     WindowManager winManager = WindowManager(WIDTH,HEIGTH,window,board,inputHandler);
 
 
+    // board.movePieceNoValidate(0x0080000000000000,  0x0000000000800000);
+
     while (window.isOpen())
     {
         sf::Event event;

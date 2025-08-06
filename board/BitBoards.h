@@ -56,6 +56,18 @@ struct Bitboards {
         allOccupancy = whiteOccupancy | blackOccupancy;
     }
 
+    Bitboard flip_vertical(Bitboard bb) {
+    bb = ((bb & 0x00000000000000FFULL) << 56) |
+         ((bb & 0x000000000000FF00ULL) << 40) |
+         ((bb & 0x0000000000FF0000ULL) << 24) |
+         ((bb & 0x00000000FF000000ULL) << 8)  |
+         ((bb & 0x000000FF00000000ULL) >> 8)  |
+         ((bb & 0x0000FF0000000000ULL) >> 24) |
+         ((bb & 0x00FF000000000000ULL) >> 40) |
+         ((bb & 0xFF00000000000000ULL) >> 56);
+    return bb;
+    }
+
     PieceInfo findPieceType(Bitboard square){
         for(int color = WHITE; color < COLOR_NB; color++){
             for(int piece = PAWN; piece < PIECE_TYPE_NB; piece++ ){
@@ -71,5 +83,14 @@ struct Bitboards {
 
 
 };
+
+const Bitboard RANK1 = 0xFF00000000000000;
+const Bitboard RANK2 = 0x00FF000000000000;
+const Bitboard RANK3 = 0x0000FF0000000000;
+const Bitboard RANK4 = 0x000000FF00000000;
+const Bitboard RANK5 = 0x00000000FF000000;
+const Bitboard RANK6 = 0x0000000000FF0000;
+const Bitboard RANK7 = 0x000000000000FF00;
+const Bitboard RANK8 = 0x00000000000000FF;
 
 #endif 

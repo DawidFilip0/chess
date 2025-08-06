@@ -120,6 +120,7 @@ void WindowManager::drawSelect(){
 }
 
 void WindowManager::drawPossibleMoves(int perspective){
+    if(!inputHandler.isPieceSelected){return;}
     Bitboard av_m = inputHandler.possibleMoves;
     while(av_m){
                 int sq = __builtin_ctzll(av_m); 

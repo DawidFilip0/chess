@@ -5,6 +5,11 @@ Board::Board():allPieces{}{
     allPieces.setupStartingPosition();
 };
 
+bool Board::singleBitIsOn(Bitboard square){
+    return (square != 0 && (square & (square - 1)) == 0); // makes sure only one bit is set to 1
+
+}
+
 Bitboards Board::getAllPieces(){
     return allPieces;
 }   
@@ -18,30 +23,37 @@ void Board::movePieceNoValidate(Bitboard from, Bitboard to){ //does not take val
     movePiece(from,to);
 }
 
+void Board::movePieceValidate(Bitboard from, Bitboard to){
+    if(!(singleBitIsOn(from) && singleBitIsOn(to))){return;}
+    if((get_moves_from_square(from) & to) == 0){return;}
+    movePiece(from,to);
+}
+
 void Board::movePiece(Bitboard from, Bitboard to){
     PieceInfo info = allPieces.findPieceType(from);
+    PieceInfo infoTo = allPieces.findPieceType(to);
+    if(infoTo.color != -1){allPieces.boards[infoTo.color][infoTo.type]  = allPieces.boards[infoTo.color][infoTo.type] & ~to;}
     allPieces.boards[info.color][info.type]  = allPieces.boards[info.color][info.type] & ~from;
     allPieces.boards[info.color][info.type]  = allPieces.boards[info.color][info.type] | to;
+    allPieces.calculateOccpancy();
 }
 
 Bitboard Board::gen_p_mv(Bitboard pawn, int side){
     Bitboard legal_moves = 0;
     Bitboard tentative_moves = 0;
     Bitboard tentative_attacks = 0;
-    int sq = __builtin_ctzll(pawn);
-
 
     if(side == WHITE){
         tentative_moves = pawn;
         
         tentative_moves = (tentative_moves >> 8);
-        if((sq / 8) == 6){ tentative_moves = tentative_moves | (tentative_moves >> 8) ;}
+        if(pawn & RANK2){ tentative_moves = tentative_moves | (tentative_moves >> 8) ;}
         
        
 
         tentative_attacks = pawn;
-        if(sq % 8 != 7){ tentative_attacks = (pawn >> 7);}
-        if(sq % 8 != 0){tentative_attacks = tentative_attacks | (pawn >> 9);}
+        tentative_attacks = (pawn >> 7);
+        tentative_attacks = tentative_attacks | (pawn >> 9);
         
         legal_moves = tentative_attacks &  allPieces.blackOccupancy;
         tentative_moves = (tentative_moves &  ~allPieces.allOccupancy);
@@ -51,25 +63,18 @@ Bitboard Board::gen_p_mv(Bitboard pawn, int side){
         tentative_moves = pawn;
         
         tentative_moves = (tentative_moves << 8);
-        if((sq / 8) == 1){ tentative_moves = tentative_moves | (tentative_moves << 8) ;}
+        if(pawn & RANK7){ tentative_moves = tentative_moves | (tentative_moves << 8) ;}
         
-       
-
         tentative_attacks = pawn;
-        if(sq % 8 != 0){ tentative_attacks = (pawn << 7);}
-        if(sq % 8 != 7){tentative_attacks = tentative_attacks | (pawn << 9);}
+        tentative_attacks = (pawn << 7);
+        tentative_attacks = tentative_attacks | (pawn << 9);
         
-        legal_moves = tentative_attacks &  allPieces.blackOccupancy;
+        legal_moves = tentative_attacks &  allPieces.whiteOccupancy;
         tentative_moves = (tentative_moves &  ~allPieces.allOccupancy);
         legal_moves = tentative_moves | legal_moves;
     }
-    
-    
 
-
-
-
-    
+        
     return legal_moves;
 }
 
@@ -77,7 +82,7 @@ Bitboard Board::gen_p_mv(Bitboard pawn, int side){
 
 Bitboard Board::get_moves_from_square(Bitboard square){
     Bitboard possible_moves = 0;
-    if(square != 0 && (square & (square - 1)) != 0){return possible_moves;} // makes sure only one bit is set to 1
+    if(!singleBitIsOn(square)){return possible_moves;} // makes sure only one bit is set to 1
     PieceInfo info = allPieces.findPieceType(square);
     if(info.color == -1){return possible_moves;};
     return apply_gen_funciton(info.color,square,info.type);
