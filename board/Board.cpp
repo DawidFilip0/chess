@@ -1,6 +1,5 @@
 #include "Board.h"
 
-
 Board::Board():allPieces{}{
     allPieces.setupStartingPosition();
 };
@@ -78,6 +77,19 @@ Bitboard Board::gen_p_mv(Bitboard pawn, int side){
     return legal_moves;
 }
 
+Bitboard Board::gen_n_mv(Bitboard knight, int side){ //knight
+    Bitboard moves = 0;
+    int sq = __builtin_ctzll(knight); 
+    if(sq % 8 != 7 && sq % 8 != 6){moves = moves | (knight >> 6) |(knight << 10);}
+    if(sq % 8 != 7){moves = moves | (knight >> 15)  | (knight << 17)   ;}
+
+    if(sq % 8 != 0 && sq % 8 != 1){moves = moves | (knight >> 10)| (knight << 6);  }
+    if(sq % 8 != 0){moves = moves | (knight >> 17) |(knight << 15)  ;}
+
+    moves = (side == WHITE) ? moves & ~allPieces.whiteOccupancy : moves & ~allPieces.blackOccupancy;
+    return moves;
+}
+
 
 
 Bitboard Board::get_moves_from_square(Bitboard square){
@@ -95,6 +107,8 @@ Bitboard Board::apply_gen_funciton(int side, Bitboard square, int piece_type){
     case PAWN:
         return gen_p_mv(square,side);
         break;
+    case KNIGHT:
+        return gen_n_mv(square,side);
     default:
         return defult_return;
     }

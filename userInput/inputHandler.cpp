@@ -1,7 +1,6 @@
 
 
 #include "inputHandler.h"
-#include <iostream>
 
 
 InputHandler::InputHandler(sf::RenderWindow& window, Board& board)
@@ -26,7 +25,6 @@ void InputHandler::selectSquare(sf::Event event){
             int x;
             getHoveredSquare(600,y,x);
             Bitboard to = getMask(y,x);
-            std::cout << "im doing something!" << std::endl;
             board.movePieceValidate(from,to);
             return;
         }
