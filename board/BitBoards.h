@@ -13,6 +13,8 @@ struct PieceInfo{
 };
 
 
+    
+//test comment
 struct Bitboards {
     Bitboard boards[COLOR_NB][PIECE_TYPE_NB];
     Bitboard blackOccupancy;

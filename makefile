@@ -1,5 +1,6 @@
 CXX = g++
-CXXFLAGS = -Wall -g
+CXXFLAGS = -Wall -Wextra -Wpedantic -Wconversion -Wsign-conversion -Wshadow -Wold-style-cast -Wnon-virtual-dtor -g
+
 LDFLAGS = -lsfml-graphics -lsfml-window -lsfml-system
 
 TARGET = sfml-app

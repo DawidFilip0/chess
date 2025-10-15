@@ -5,7 +5,7 @@
 #include <iostream>
 
 
-WindowManager::WindowManager(int width, int height, sf::RenderWindow& win, Board& board,InputHandler& inputHandler):window(win),board(board),inputHandler(inputHandler)
+WindowManager::WindowManager(int width, int height, sf::RenderWindow& win, Board& board,InputHandler& inputHandler):inputHandler(inputHandler),window(win),board(board)
 {
     this -> width = width;
     this -> heigth = heigth;
@@ -43,7 +43,7 @@ void WindowManager::draw(){
 void WindowManager::drawBoard(){      
         sf::Color brown(181, 136, 99);  
         sf::Color light(240, 217, 181);  
-        sf::RectangleShape shape2({square_width,square_width});
+        sf::RectangleShape shape2({(float)square_width,(float)square_width});
         for(int i = 0; i < 8; i++){
             for(int j = 0; j<8; j++){
                 shape2.setPosition(i*square_width,j*square_width);
@@ -59,8 +59,8 @@ void WindowManager::drawBoard(){
 }
 
 void WindowManager::drawPieces(int perspective){
-        sf::RectangleShape shape2({square_width,square_width});
-        sf::RectangleShape shape3({square_width,square_width});
+        sf::RectangleShape shape2({(float)square_width,(float)square_width});
+        sf::RectangleShape shape3({(float)square_width,(float)square_width});
         for(int color = WHITE; color < COLOR_NB; color++){
             for(int piece = PAWN; piece < PIECE_TYPE_NB; piece++ ){
 
@@ -94,7 +94,7 @@ void WindowManager::drawPieces(int perspective){
 
 
 void WindowManager::colorSquare(int y, int x, sf::Color col){
-    sf::RectangleShape shape3({square_width,square_width});
+    sf::RectangleShape shape3({(float)square_width,(float)square_width});
     shape3.setFillColor(sf::Color::Transparent);
     shape3.setOutlineColor(col);
     shape3.setOutlineThickness(3);
