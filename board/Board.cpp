@@ -77,6 +77,7 @@ Bitboard Board::gen_p_mv(Bitboard pawn, int side){
     return legal_moves;
 }
 
+//asdf
 Bitboard Board::gen_n_mv(Bitboard knight, int side){ //knight
     Bitboard moves = 0;
     int sq = __builtin_ctzll(knight); 
@@ -87,6 +88,21 @@ Bitboard Board::gen_n_mv(Bitboard knight, int side){ //knight
     if(sq % 8 != 0){moves = moves | (knight >> 17) |(knight << 15)  ;}
 
     moves = (side == WHITE) ? moves & ~allPieces.whiteOccupancy : moves & ~allPieces.blackOccupancy;
+    return moves;
+}
+
+Bitboard Board::gen_r_mv(Bitboard rook, int side){
+    Bitboard moves = 0;
+    for(int i =0 ; i < 8; i++){
+        moves = moves | (rook << (8*i));
+        moves = moves | (rook << i);
+    }
+    for(int i =0 ; i < 8; i++){
+        moves = moves | (rook >> (8*i));
+        moves = moves | (rook >> i);
+
+    }
+
     return moves;
 }
 
@@ -109,6 +125,8 @@ Bitboard Board::apply_gen_funciton(int side, Bitboard square, int piece_type){
         break;
     case KNIGHT:
         return gen_n_mv(square,side);
+    case ROOK:
+        return gen_r_mv(square,side);
     default:
         return defult_return;
     }
