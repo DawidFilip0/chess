@@ -47,8 +47,6 @@ Bitboard Board::gen_p_mv(Bitboard pawn, int side){
         
         tentative_moves = (tentative_moves >> 8);
         if(pawn & RANK2){ tentative_moves = tentative_moves | (tentative_moves >> 8) ;}
-        
-       
 
         tentative_attacks = pawn;
         tentative_attacks = (pawn >> 7);
@@ -77,7 +75,7 @@ Bitboard Board::gen_p_mv(Bitboard pawn, int side){
     return legal_moves;
 }
 
-//asdf
+                                   
 Bitboard Board::gen_n_mv(Bitboard knight, int side){ //knight
     Bitboard moves = 0;
     int sq = __builtin_ctzll(knight); 
@@ -93,16 +91,50 @@ Bitboard Board::gen_n_mv(Bitboard knight, int side){ //knight
 
 Bitboard Board::gen_r_mv(Bitboard rook, int side){
     Bitboard moves = 0;
-    for(int i =0 ; i < 8; i++){
-        moves = moves | (rook << (8*i));
-        moves = moves | (rook << i);
-    }
-    for(int i =0 ; i < 8; i++){
-        moves = moves | (rook >> (8*i));
-        moves = moves | (rook >> i);
+    Bitboard move_pos = 0;
+
+    Bitboard friendly = ((side == WHITE) ? allPieces.whiteOccupancy : allPieces.blackOccupancy);
+    Bitboard enemy = ((side == WHITE) ? allPieces.blackOccupancy : allPieces.whiteOccupancy);
+
+
+    move_pos = rook;
+    for(int i = 1 ; i < 8; i++){
+        move_pos = move_pos << 8;
+        if((move_pos & friendly) != 0){break;}
+        moves |= move_pos;
+        if((move_pos & enemy) != 0){break;}
 
     }
 
+
+    move_pos = rook;
+    for(int i = 1; i < 8; i++){
+        // if(__builtin_ctzll(move_pos) % 8 == 7){break;}
+        move_pos = move_pos >> 1;
+        if((move_pos & friendly) != 0){break;}
+        moves |= move_pos;
+        if((move_pos & enemy) != 0){break;}
+
+    }   
+
+    move_pos = rook;
+    for(int i = 1 ; i < 8; i++){
+        move_pos = move_pos >> 8;
+        if((move_pos & friendly) != 0){break;}
+        moves |= move_pos;
+        if((move_pos & enemy) != 0){break;}
+
+    }
+
+    // move_pos = rook;
+    // for(int i = 1; i< 8; i++){
+    //     if(__builtin_ctzll(move_pos) % 8 == 1){break;}
+    //     move_pos = move_pos << 1;
+    //     if((move_pos & friendly) != 0){break;}
+    //     moves |= move_pos;
+    //     if((move_pos & enemy) != 0){break;}
+
+    // }
     return moves;
 }
 
