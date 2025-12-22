@@ -77,7 +77,7 @@ void WindowManager::drawPieces(int perspective){
                     }
                     else{
                         y = sq / 8;   
-                        x =  sq % 8;  
+                        x =  7 - (sq % 8);  
                     }               
                     shape2.setTexture(&textures[color][piece]);
                     shape2.setPosition(x*square_width,y*square_width);
@@ -133,7 +133,7 @@ void WindowManager::drawPossibleMoves(int perspective){
                 }
                 else{
                     y = sq / 8;   
-                    x =  sq % 8;  
+                    x =  7 - (sq % 8);  
                 }
                 sf::Color c(0, 255, 0);
                 colorSquare(y,x,c);

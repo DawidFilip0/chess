@@ -71,7 +71,6 @@ Bitboard Board::gen_p_mv(Bitboard pawn, int side){
         legal_moves = tentative_moves | legal_moves;
     }
 
-        
     return legal_moves;
 }
 
@@ -92,10 +91,8 @@ Bitboard Board::gen_n_mv(Bitboard knight, int side){ //knight
 Bitboard Board::gen_r_mv(Bitboard rook, int side){
     Bitboard moves = 0;
     Bitboard move_pos = 0;
-
     Bitboard friendly = ((side == WHITE) ? allPieces.whiteOccupancy : allPieces.blackOccupancy);
     Bitboard enemy = ((side == WHITE) ? allPieces.blackOccupancy : allPieces.whiteOccupancy);
-
 
     move_pos = rook;
     for(int i = 1 ; i < 8; i++){
@@ -106,10 +103,9 @@ Bitboard Board::gen_r_mv(Bitboard rook, int side){
 
     }
 
-
     move_pos = rook;
     for(int i = 1; i < 8; i++){
-        // if(__builtin_ctzll(move_pos) % 8 == 7){break;}
+        if(__builtin_ctzll(move_pos) % 8 == 0){break;}
         move_pos = move_pos >> 1;
         if((move_pos & friendly) != 0){break;}
         moves |= move_pos;
@@ -126,18 +122,72 @@ Bitboard Board::gen_r_mv(Bitboard rook, int side){
 
     }
 
-    // move_pos = rook;
-    // for(int i = 1; i< 8; i++){
-    //     if(__builtin_ctzll(move_pos) % 8 == 1){break;}
-    //     move_pos = move_pos << 1;
-    //     if((move_pos & friendly) != 0){break;}
-    //     moves |= move_pos;
-    //     if((move_pos & enemy) != 0){break;}
+    move_pos = rook;
+    for(int i = 1; i< 8; i++){
+        if(__builtin_ctzll(move_pos) % 8 == 7){break;}
+        move_pos = move_pos << 1;
+        if((move_pos & friendly) != 0){break;}
+        moves |= move_pos;
+        if((move_pos & enemy) != 0){break;}
 
-    // }
+    }
     return moves;
 }
 
+
+Bitboard Board::gen_b_mv(Bitboard bishop, int side){
+    Bitboard moves = 0;
+    Bitboard move_pos = 0;
+
+    Bitboard friendly = ((side == WHITE) ? allPieces.whiteOccupancy : allPieces.blackOccupancy);
+    Bitboard enemy = ((side == WHITE) ? allPieces.blackOccupancy : allPieces.whiteOccupancy);
+
+    move_pos = bishop;
+    for(int i = 1; i< 8; i++){
+        if(__builtin_ctzll(move_pos) % 8 == 7){break;}
+        move_pos = move_pos << 9;
+        if((move_pos & friendly) != 0){break;}
+        moves |= move_pos;
+        if((move_pos & enemy) != 0){break;}
+    }
+
+    move_pos = bishop;
+    for(int i = 1; i< 8; i++){
+        if(__builtin_ctzll(move_pos) % 8 == 0){break;}
+        move_pos = move_pos << 7;
+        if((move_pos & friendly) != 0){break;}
+        moves |= move_pos;
+        if((move_pos & enemy) != 0){break;}
+    }
+
+    move_pos = bishop;
+    for(int i = 1; i< 8; i++){
+        if(__builtin_ctzll(move_pos) % 8 == 0){break;}
+        move_pos = move_pos >> 9;
+        if((move_pos & friendly) != 0){break;}
+        moves |= move_pos;
+        if((move_pos & enemy) != 0){break;}
+    }
+
+    move_pos = bishop;
+    for(int i = 1; i< 8; i++){
+        if(__builtin_ctzll(move_pos) % 8 == 7){break;}
+        move_pos = move_pos >> 7;
+        if((move_pos & friendly) != 0){break;}
+        moves |= move_pos;
+        if((move_pos & enemy) != 0){break;}
+    }
+
+    return moves;
+
+}
+
+
+Bitboard Board::gen_k_mv(Bitboard king, int side){
+    Bitboard moves;
+
+    return moves;
+}
 
 
 Bitboard Board::get_moves_from_square(Bitboard square){
@@ -154,11 +204,16 @@ Bitboard Board::apply_gen_funciton(int side, Bitboard square, int piece_type){
     {
     case PAWN:
         return gen_p_mv(square,side);
-        break;
     case KNIGHT:
         return gen_n_mv(square,side);
     case ROOK:
         return gen_r_mv(square,side);
+    case BISHOP:
+        return gen_b_mv(square,side);
+    case QUEEN:
+        return ( gen_r_mv(square,side) | gen_b_mv(square,side));
+        break;
+    case KING:
     default:
         return defult_return;
     }

@@ -47,7 +47,7 @@ void InputHandler::selectSquare(sf::Event event){
 
 Bitboard InputHandler::getMask(int y, int x){
 Bitboard mask = 1;
-int shift = y*8 + x;
+int shift = y*8 +  7 - x; //// CHYBA TUTAJ ZMIANA POMOGLA W NAPRAWIE ORIENTACJI 
 mask = mask << shift;
 return mask;
 }
