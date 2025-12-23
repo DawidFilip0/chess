@@ -5,10 +5,10 @@
 #include <iostream>
 
 
-WindowManager::WindowManager(int width, int height, sf::RenderWindow& win, Board& board,InputHandler& inputHandler):inputHandler(inputHandler),window(win),board(board)
+WindowManager::WindowManager(int wwidth, int hheight, sf::RenderWindow& win, Board& bboard,InputHandler& iinputHandler):inputHandler(iinputHandler),window(win),board(bboard)
 {
-    this -> width = width;
-    this -> heigth = heigth;
+    this -> width = wwidth;
+    this -> heigth = hheight;   
     this -> square_width = (int)(width / 8);
     std::string path;
     for(int color = 0; color < COLOR_NB; color++){
@@ -46,7 +46,7 @@ void WindowManager::drawBoard(){
         sf::RectangleShape shape2({(float)square_width,(float)square_width});
         for(int i = 0; i < 8; i++){
             for(int j = 0; j<8; j++){
-                shape2.setPosition(i*square_width,j*square_width);
+                shape2.setPosition((float)(i*square_width),(float)(j*square_width));
                 if((i+j) %2 == 0){
                 shape2.setFillColor(light);
                 }
@@ -80,7 +80,7 @@ void WindowManager::drawPieces(int perspective){
                         x =  7 - (sq % 8);  
                     }               
                     shape2.setTexture(&textures[color][piece]);
-                    shape2.setPosition(x*square_width,y*square_width);
+                    shape2.setPosition((float)(x*square_width),(float)(y*square_width));
                     window.draw(shape2);
                 }
             }
@@ -99,7 +99,7 @@ void WindowManager::colorSquare(int y, int x, sf::Color col){
     shape3.setOutlineColor(col);
     shape3.setOutlineThickness(3);
 
-    shape3.setPosition(x*square_width,y*square_width);
+    shape3.setPosition((float)(x*square_width),(float)(y*square_width));
     window.draw(shape3);
 }
 

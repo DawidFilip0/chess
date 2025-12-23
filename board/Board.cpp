@@ -184,7 +184,24 @@ Bitboard Board::gen_b_mv(Bitboard bishop, int side){
 
 
 Bitboard Board::gen_k_mv(Bitboard king, int side){
-    Bitboard moves;
+    Bitboard moves = 0;
+
+    Bitboard friendly = ((side == WHITE) ? allPieces.whiteOccupancy : allPieces.blackOccupancy);
+    int slides[] = {1,7,8,9};
+
+    Bitboard move_pos = king;
+    for(int i = 0; i < 4 ; i++){
+        move_pos = king << slides[i];
+        if((move_pos & friendly) != 0){continue;}
+        moves |= move_pos;
+    }
+
+    move_pos = king;
+    for(int i = 0; i < 4 ; i++){
+        move_pos = king >> slides[i];
+        if((move_pos & friendly) != 0){continue;}
+        moves |= move_pos;
+    }
 
     return moves;
 }
@@ -214,6 +231,8 @@ Bitboard Board::apply_gen_funciton(int side, Bitboard square, int piece_type){
         return ( gen_r_mv(square,side) | gen_b_mv(square,side));
         break;
     case KING:
+        return gen_k_mv(square, side);
+        break;
     default:
         return defult_return;
     }
