@@ -13,6 +13,7 @@ class Board{
         void switchSide();
         void movePieceValidate(Bitboard from, Bitboard to);
         void movePieceNoValidate(Bitboard from, Bitboard to);
+        bool checkIfKingChecked(int side);
         Bitboards getAllPieces();
 
         

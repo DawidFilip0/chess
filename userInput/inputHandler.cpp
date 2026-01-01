@@ -1,11 +1,7 @@
-
-
 #include "inputHandler.h"
-
 
 InputHandler::InputHandler(sf::RenderWindow& window, Board& board)
 :window(window),board(board){}
-
 
 void InputHandler::getHoveredSquare(int width, int& y, int& x){
     sf::Vector2<int> pos;

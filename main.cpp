@@ -4,26 +4,18 @@
 #include "./board/Board.h"
 #include "./userInput/inputHandler.h"
 
-
 #define WIDTH 600
 #define HEIGTH 600
 
-
 using namespace std;
-
-
-void drawBoard();
 
 int main()
 {
-
 
     sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGTH), "SZACHY 2000");
     Board board = Board();
     window.setActive(true);
     window.setFramerateLimit(60);
-
-    
     InputHandler inputHandler = InputHandler(window,board);
     WindowManager winManager = WindowManager(WIDTH,HEIGTH,window,board,inputHandler);
 
@@ -39,9 +31,6 @@ int main()
             if(event.type == sf::Event::MouseButtonPressed){inputHandler.selectSquare(event);}
         }
         winManager.draw();
-        
     }
-
-
 }
 
