@@ -5,6 +5,10 @@
 Board::Board():allPieces{}{
     allPieces.setupStartingPosition();
     sideToMove = WHITE;
+    blackKingSideCastlingPossible = true;
+    blackQueenSideCastlingPossible = true;
+    whiteKingSideCastlingPossible = true;
+    whiteQueenSideCastlingPossible = true;
 };
 
 bool Board::singleBitIsOn(Bitboard square){
@@ -41,6 +45,14 @@ void Board::movePieceValidate(Bitboard from, Bitboard to){
 void Board::movePiece(Bitboard from, Bitboard to){
     PieceInfo info = allPieces.findPieceType(from);
     PieceInfo infoTo = allPieces.findPieceType(to);
+    if(from & allPieces.boards[BLACK][KING]){blackKingSideCastlingPossible = false; blackQueenSideCastlingPossible = false;}
+    if(from & allPieces.boards[WHITE][KING]){whiteKingSideCastlingPossible = false; whiteQueenSideCastlingPossible = false;}
+    if(from & FILE_H & RANK1){whiteKingSideCastlingPossible = false;}
+    if(from & FILE_A  & RANK1){whiteQueenSideCastlingPossible = false;}
+    if(from & FILE_H & RANK8 ){blackKingSideCastlingPossible = false;}
+    if(from & FILE_A & RANK8 ){blackQueenSideCastlingPossible = false;}
+
+
     if(infoTo.color != -1){allPieces.boards[infoTo.color][infoTo.type]  = allPieces.boards[infoTo.color][infoTo.type] & ~to;}
     allPieces.boards[info.color][info.type]  = allPieces.boards[info.color][info.type] & ~from;
     allPieces.boards[info.color][info.type]  = allPieces.boards[info.color][info.type] | to;
@@ -213,60 +225,65 @@ Bitboard Board::gen_k_mv(Bitboard king, int side){
         moves |= move_pos;
     }
 
+    return (moves | add_castling_if_possible(side));
+}
+
+
+bool Board::checkIfAttacked(Bitboard square,int side){
+    Bitboard consideredSquares = 0;
+    consideredSquares = gen_r_mv(square, side) & ((side == WHITE) ? 
+    (allPieces.boards[BLACK][ROOK] | allPieces.boards[BLACK][QUEEN] )
+    : (allPieces.boards[WHITE][ROOK] | allPieces.boards[WHITE][QUEEN]) );
+    if(consideredSquares){return true;}
+
+    consideredSquares = gen_b_mv(square, side) & ((side == WHITE) ? 
+    (allPieces.boards[BLACK][BISHOP] | allPieces.boards[BLACK][QUEEN] )
+    : (allPieces.boards[WHITE][BISHOP] | allPieces.boards[WHITE][QUEEN]) );
+    if(consideredSquares){return true;}
+
+    consideredSquares = gen_n_mv(square, side) & ((side == WHITE) ? 
+    allPieces.boards[BLACK][KNIGHT] : allPieces.boards[WHITE][KNIGHT]);
+    if(consideredSquares){return true;}
+
+    consideredSquares = gen_k_mv(square, side) & ((side == WHITE) ? 
+    allPieces.boards[BLACK][KING] : allPieces.boards[WHITE][KING]);
+    if(consideredSquares){return true;}
+
+    consideredSquares = (side == WHITE) ? ((square >> 7) | (square >> 9)) : ((square << 7) | (square << 9));
+    if((consideredSquares & ((side == WHITE) ? allPieces.boards[BLACK][PAWN] : allPieces.boards[WHITE][PAWN])) > 0){
+        return true;
+    }
+
+    return false;    // if(((RANK1 & (FILE_B | FILE_C) & allPieces.whiteOccupancy) == 0) & whiteKingSideCastlingPossible  &
+    // checkIfAttacked(FILE_B & RANK1,side) & checkIfAttacked(FILE_C & RANK1, side)){
+    //     moves |= (FILE_B & RANK1);
+    // }
+
+}
+
+
+
+Bitboard Board::add_castling_if_possible(int side){
+    Bitboard moves = 0;
+    if(side == WHITE && isWhiteChecked){return moves;}
+    if(side == BLACK && isBlackChecked){return moves;}
+
+
+    // if(((RANK1 & (FILE_B | FILE_C) & allPieces.whiteOccupancy) == 0) & whiteKingSideCastlingPossible  &
+    // checkIfAttacked(FILE_B & RANK1,side) & checkIfAttacked(FILE_C & RANK1, side)){
+    //     moves |= (FILE_B & RANK1);
+    // }
+
+    
     return moves;
+
 }
 
 bool Board::checkIfKingChecked(int side){
     Bitboard consideredSquares = 0;
     Bitboard king = allPieces.boards[side][KING];
-    consideredSquares = gen_r_mv(king, side) & ((side == WHITE) ? 
-    (allPieces.boards[BLACK][ROOK] | allPieces.boards[BLACK][QUEEN] )
-    : (allPieces.boards[WHITE][ROOK] | allPieces.boards[WHITE][QUEEN]) );
 
-    (side == WHITE) ? isWhiteChecked = false : isBlackChecked = false;
-
-
-    if(consideredSquares){
-        std::cout << consideredSquares << "check by rook" << std::endl;
-        (side == WHITE) ? isWhiteChecked = true : isBlackChecked = true;
-        return true;
-        
-    }
-
-    consideredSquares = gen_b_mv(king, side) & ((side == WHITE) ? 
-    (allPieces.boards[BLACK][BISHOP] | allPieces.boards[BLACK][QUEEN] )
-    : (allPieces.boards[WHITE][BISHOP] | allPieces.boards[WHITE][QUEEN]) );
-    if(consideredSquares){
-        std::cout << consideredSquares << "check by bishop" << std::endl;
-        (side == WHITE) ? isWhiteChecked = true : isBlackChecked = true;
-        return true;
-       
-    }
-
-    consideredSquares = gen_n_mv(king, side) & ((side == WHITE) ? 
-    allPieces.boards[BLACK][KNIGHT] : allPieces.boards[WHITE][KNIGHT]);
-    if(consideredSquares){
-        std::cout << consideredSquares << "check kinght" << std::endl;
-        (side == WHITE) ? isWhiteChecked = true : isBlackChecked = true;
-        return true;
-        
-    }
-
-    consideredSquares = gen_k_mv(king, side) & ((side == WHITE) ? 
-    allPieces.boards[BLACK][KING] : allPieces.boards[WHITE][KING]);
-    if(consideredSquares){
-        std::cout << consideredSquares << "check by king" << std::endl;
-        (side == WHITE) ? isWhiteChecked = true : isBlackChecked = true;
-        return true;
-        
-    }
-
-    consideredSquares = (side == WHITE) ? ((king >> 7) | (king >> 9)) : ((king << 7) | (king << 9));
-    if((consideredSquares & ((side == WHITE) ? allPieces.boards[BLACK][PAWN] : allPieces.boards[WHITE][PAWN])) > 0){
-        std::cout << consideredSquares << "check by pawn" << std::endl;
-        (side == WHITE) ? isWhiteChecked = true : isBlackChecked = true;
-        return true;
-    }
+    return checkIfAttacked(allPieces.boards[side][KING],side);
 
 
     return false;

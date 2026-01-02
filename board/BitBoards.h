@@ -93,4 +93,14 @@ const Bitboard RANK6 = 0x0000000000FF0000;
 const Bitboard RANK7 = 0x000000000000FF00;
 const Bitboard RANK8 = 0x00000000000000FF;
 
+const Bitboard FILE_A = 0x8080808080808080;
+const Bitboard FILE_B = 0x4040404040404040;
+const Bitboard FILE_C = 0x2020202020202020;
+const Bitboard FILE_D = 0x1010101010101010;
+const Bitboard FILE_E = 0x0808080808080808;
+const Bitboard FILE_F = 0x0404040404040404;
+const Bitboard FILE_G = 0x0202020202020202;
+const Bitboard FILE_H = 0x0101010101010101;
+
+
 #endif 
